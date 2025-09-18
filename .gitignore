@@ -1,7 +1,8 @@
 ### IntelliJ IDEA ###
-/.idea
-./.idea
 .idea/
+.idea
+/.idea
+
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
@@ -23,7 +24,7 @@ bin/
 /nbbuild/
 /dist/
 /nbdist/
-/.nb-gradle/
+.nb-gradle/
 
 ### VS Code ###
 .vscode/
