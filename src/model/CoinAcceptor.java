@@ -14,4 +14,8 @@ public class CoinAcceptor {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    public int getBalance() {
+        return amount;
+    }
 }
