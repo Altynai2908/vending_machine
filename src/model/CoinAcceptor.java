@@ -26,4 +26,12 @@ public class CoinAcceptor {
         }
         return false;
     }
+
+    public boolean withdrawFunds(int fundAmount) {
+        if (fundAmount > 0 && amount >= fundAmount) {
+            amount -= fundAmount;
+            return true;
+        }
+        return false;
+    }
 }
