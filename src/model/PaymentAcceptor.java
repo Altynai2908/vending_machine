@@ -1,16 +1,9 @@
 package model;
 
 public interface PaymentAcceptor {
-
-
-    int getBalance();
-
-    boolean addFunds(int amount);
-
-    boolean withdrawFunds(int amount);
-
-    String getAddFundsDescription();
-
-    boolean canPurchase(int price);
-
+    int getAmount();
+    void addAmount(int amount);
+    boolean canAfford(int price);
+    void deductAmount(int price);
+    void addAmount();
 }
