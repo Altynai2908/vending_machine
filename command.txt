@@ -1,0 +1,11 @@
+git config --global user.name
+git config --global user.email
+git status
+git remote add origin
+git branch
+git checkout
+git commit -m
+git add .
+git push
+git log
+git push -u origin main
