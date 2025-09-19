@@ -11,5 +11,6 @@ public interface PaymentAcceptor {
 
     String getAddFundsDescription();
 
-    boolean processAddFundsRequest();
+    boolean canPurchase(int price);
+
 }
