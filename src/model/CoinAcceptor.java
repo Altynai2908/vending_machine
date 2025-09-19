@@ -18,4 +18,12 @@ public class CoinAcceptor {
     public int getBalance() {
         return amount;
     }
+
+    public boolean addFunds(int fundAmount) {
+        if (fundAmount > 0) {
+            amount += fundAmount;
+            return true;
+        }
+        return false;
+    }
 }
