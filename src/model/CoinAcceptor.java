@@ -1,6 +1,6 @@
 package model;
 
-public class CoinAcceptor {
+public class CoinAcceptor implements PaymentAcceptor{
     private int amount;
 
     public CoinAcceptor(int amount) {
@@ -37,5 +37,9 @@ public class CoinAcceptor {
 
     public String getAddFundsDescription() {
         return "a - Пополнить баланс";
+    }
+
+    public boolean processAddFundsRequest() {
+        return addFunds(10);
     }
 }
