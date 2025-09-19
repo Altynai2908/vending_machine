@@ -34,4 +34,8 @@ public class CoinAcceptor {
         }
         return false;
     }
+
+    public String getAddFundsDescription() {
+        return "a - Пополнить баланс";
+    }
 }
