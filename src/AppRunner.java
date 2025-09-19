@@ -9,12 +9,10 @@ public class AppRunner {
 
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
     private final PaymentAcceptor paymentAcceptor;
-
     private static boolean isExit = false;
 
     public AppRunner(PaymentAcceptor paymentAcceptor) {
         this.paymentAcceptor = paymentAcceptor;
-
         products.addAll(new Product[]{
                 new Water(ActionLetter.B, 20),
                 new CocaCola(ActionLetter.C, 50),
@@ -25,11 +23,8 @@ public class AppRunner {
         });
     }
 
-    public static void run() {
-        // Пример с монетоприёмником
-        PaymentAcceptor coinAcceptor = new CoinAcceptor(0);
-        AppRunner app = new AppRunner(coinAcceptor);
-
+    public static void run(PaymentAcceptor acceptor) {
+        AppRunner app = new AppRunner(acceptor);
         while (!isExit) {
             app.startSimulation();
         }
@@ -39,60 +34,63 @@ public class AppRunner {
         print("В автомате доступны:");
         showProducts(products);
 
-        print("Монет на сумму: " + paymentAcceptor.getAmount());
+        print("Баланс: " + paymentAcceptor.getAmount());
 
-        UniversalArray<Product> allowProducts = getAllowedProducts();
-        chooseAction(allowProducts);
+        UniversalArray<Product> allowedProducts = getAllowedProducts();
+        chooseAction(allowedProducts);
     }
 
     private UniversalArray<Product> getAllowedProducts() {
-        UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
+        UniversalArray<Product> allowedProducts = new UniversalArrayImpl<>();
         for (int i = 0; i < products.size(); i++) {
             if (paymentAcceptor.canAfford(products.get(i).getPrice())) {
-                allowProducts.add(products.get(i));
+                allowedProducts.add(products.get(i));
             }
         }
-        return allowProducts;
+        return allowedProducts;
     }
 
-    private void chooseAction(UniversalArray<Product> products) {
-        while (true) {
+    private void chooseAction(UniversalArray<Product> allowedProducts) {
+        boolean actionDone = false;
+
+        while (!actionDone) {
             print(" a - Пополнить баланс");
-            showActions(products);
+            showActions(allowedProducts);
             print(" h - Выйти");
 
             String action = fromConsole().substring(0, 1);
 
+            if ("a".equalsIgnoreCase(action)) {
+                paymentAcceptor.addAmount();
+                actionDone = true;
+                continue;
+            }
+
             if ("h".equalsIgnoreCase(action)) {
                 isExit = true;
-                break;
+                actionDone = true;
+                continue;
             }
 
-            if ("a".equalsIgnoreCase(action)) {
-                paymentAcceptor.addAmount(10);
-                print("Вы пополнили баланс на 10");
-                break;
-            }
-
-            boolean found = false;
-            for (int i = 0; i < products.size(); i++) {
-                if (products.get(i).getActionLetter().equals(ActionLetter.valueOf(action.toUpperCase()))) {
-                    found = true;
-                    if (paymentAcceptor.canAfford(products.get(i).getPrice())) {
-                        paymentAcceptor.deductAmount(products.get(i).getPrice());
-                        print("Вы купили " + products.get(i).getName());
+            boolean bought = false;
+            for (int i = 0; i < allowedProducts.size(); i++) {
+                if (allowedProducts.get(i).getActionLetter().getValue().equalsIgnoreCase(action)) {
+                    if (paymentAcceptor.canAfford(allowedProducts.get(i).getPrice())) {
+                        paymentAcceptor.deductAmount(allowedProducts.get(i).getPrice());
+                        print("Вы купили " + allowedProducts.get(i).getName());
                     } else {
-                        print("Недостаточно средств для покупки " + products.get(i).getName());
+                        print("Недостаточно средств.");
                     }
+                    bought = true;
                     break;
                 }
             }
 
-            if (!found) {
-                print("Недопустимая буква. Попробуйте еще раз.");
+            if (!bought) {
+                print("Недопустимая буква. Попробуйте ещё раз.");
             }
 
-            break; // выходим из метода после обработки действия
+            actionDone = true;
         }
     }
 
